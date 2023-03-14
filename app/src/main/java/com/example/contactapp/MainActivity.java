@@ -1,31 +1,19 @@
 package com.example.contactapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-
-import com.example.contactapp.databinding.ActivityMainBinding;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -33,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import com.example.contactapp.databinding.ActivityMainBinding;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private MyContactsDatabase myContactsDatabase;
     private ArrayList<Contact> contactArrayList = new ArrayList<>();
     private ContactAdapter contactAdapter;
+    private MainActivityButtonHandler buttonHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,18 +38,15 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
-
+        buttonHandler = new MainActivityButtonHandler(this);
+        binding.setButtonHandler(buttonHandler);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-
         contactAdapter = new ContactAdapter(contactArrayList, MainActivity.this);
         recyclerView.setAdapter(contactAdapter);
-
         myContactsDatabase = Room.databaseBuilder(getApplicationContext(), MyContactsDatabase.class, "ContactsDB").build();
-
         loadContacts();
-
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -71,14 +59,6 @@ public class MainActivity extends AppCompatActivity {
                 deleteContact(contact);
             }
         }).attachToRecyclerView(recyclerView);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addAndEditContact(false, null, -1);
-            }
-        });
     }
 
     public void addAndEditContact(boolean isUpdate, Contact contact, int position) {
@@ -219,6 +199,18 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
             loadContacts();
+        }
+    }
+
+    public class MainActivityButtonHandler {
+        Context context;
+
+        public MainActivityButtonHandler(Context context) {
+            this.context = context;
+        }
+
+        public void onButtonClicked(View view) {
+            addAndEditContact(false, null, -1);
         }
     }
 }
