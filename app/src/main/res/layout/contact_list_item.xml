@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="contact"
+            type="com.example.contactapp.Contact" />
+    </data>
+
+<androidx.cardview.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
@@ -17,7 +25,7 @@
             android:id="@+id/firstNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="First Name"
+            android:text="@{contact.firstName}"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -26,7 +34,7 @@
             android:id="@+id/lastNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Last Name"
+            android:text="@{contact.lastName}"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -35,7 +43,7 @@
             android:id="@+id/emailTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email Name"
+            android:text="@{contact.email}"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="italic" />
@@ -44,7 +52,7 @@
             android:id="@+id/phoneNumberTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Phone Number"
+            android:text="@{contact.phoneNumber}"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="italic" />
@@ -52,3 +60,4 @@
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
+</layout>
